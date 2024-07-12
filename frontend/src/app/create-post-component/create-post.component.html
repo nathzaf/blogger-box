@@ -1,0 +1,94 @@
+<form (ngSubmit)="submitCreatePost()"
+      [formGroup]="createPostForm"
+      autocomplete="off"
+      class="needs-validation">
+
+  <div class="pt-2">
+    <label for="titleInput">Title:</label>
+    <input [class.is-invalid]="title.invalid && title.touched"
+           [class.is-valid]="title.valid && title.touched"
+           class="form-control"
+           formControlName="title"
+           id="titleInput"
+           type="text"/>
+    <div *ngIf="title.invalid && title.touched"
+         class="invalid-feedback text-danger">
+      <div *ngIf="title.errors?.['required']">Title is required</div>
+      <div *ngIf="title.errors?.['minlength']">Title must be at least 5 characters long</div>
+      <div *ngIf="title.errors?.['maxlength']">Title must be no longer than 100 characters</div>
+    </div>
+  </div>
+
+  <div class="pt-4">
+    <label for="categorySelect">Category:</label>
+    <div class="d-flex">
+      <select [class.is-invalid]="categoryId.invalid && categoryId.touched"
+              [class.is-valid]="categoryId.valid && categoryId.touched"
+              class="form-control"
+              formControlName="categoryId"
+              id="categorySelect"
+              type="text">
+        <option *ngFor="let category of categories" value="{{category.id}}">{{ category.name }}</option>
+      </select>
+      <button class="btn btn-primary" data-bs-target="#createCategoryModal" data-bs-toggle="modal" type="button">+
+      </button>
+    </div>
+    <div *ngIf="categoryId.invalid && categoryId.touched && categoryId.errors?.['required']"
+         class="required-category-feedback text-danger">Category is required
+    </div>
+  </div>
+
+  <div class="pt-4">
+    <label for="contentTextarea">Content:</label>
+    <textarea [class.is-invalid]="content.invalid && content.touched"
+              [class.is-valid]="content.valid && content.touched"
+              class="form-control"
+              formControlName="content"
+              id="contentTextarea"></textarea>
+    <div *ngIf="content.invalid && content.touched && content.errors?.['required']"
+         class="invalid-feedback text-danger">Content is required
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-end pt-4">
+    <button [routerLink]="['/']" class="btn btn-outline-danger" type="button">Close</button>
+    <button class="btn btn-success" type="submit">Post message</button>
+  </div>
+</form>
+
+<div aria-hidden="true" class="modal fade" id="createCategoryModal" role="dialog" tabindex="-1">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Create a new Category</h5>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="submitCreateCategory()"
+              [formGroup]="createCategoryForm"
+              autocomplete="off"
+              class="needs-validation">
+
+          <label for="nameInput">Name:</label>
+          <input [class.is-invalid]="name.invalid && name.touched"
+                 [class.is-valid]="name.valid && name.touched"
+                 class="form-control"
+                 formControlName="name"
+                 id="nameInput"
+                 type="text"/>
+          <div *ngIf="name.invalid && name.touched"
+               class="invalid-feedback text-danger">
+            <div *ngIf="name.errors?.['required']">Name is required</div>
+            <div *ngIf="name.errors?.['maxlength']">Name must be no longer than 100 characters</div>
+          </div>
+
+          <div class="d-flex justify-content-end pt-4">
+            <button class="btn btn-outline-danger" data-bs-dismiss="modal" type="button">Close</button>
+            <button class="btn btn-success" data-bs-dismiss="modal" type="submit">Create Category</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+

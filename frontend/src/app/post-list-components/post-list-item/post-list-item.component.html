@@ -1,0 +1,87 @@
+<div *ngIf="post" class="pt-4 mt-2">
+  <div class="d-flex justify-content-between">
+    <h3> {{ post.title }} </h3>
+    <div class="d-flex">
+      <button [attr.data-bs-target]="'#updatePostModal' + post.id" class="btn btn-primary" data-bs-toggle="modal"
+              type="button">Edit
+      </button>
+      <button (click)="deletePost()" class="btn btn-danger" type="button">Delete</button>
+    </div>
+  </div>
+  <p>{{ post.content }}</p>
+  <div>
+    <span class="badge rounded-pill text-bg-light">
+      {{ post.category.name }}
+    </span>
+    <span>
+     {{ post.creationDate }}
+    </span>
+  </div>
+</div>
+
+<div [attr.id]="'updatePostModal' + post.id" aria-hidden="true" class="modal fade" role="dialog" tabindex="-1">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Update a Post</h5>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="submitUpdatePost()"
+              [formGroup]="updatePostForm"
+              autocomplete="off"
+              class="needs-validation">
+
+          <div class="pt-2">
+            <label for="titleInput">Title:</label>
+            <input [class.is-invalid]="title.invalid && title.touched"
+                   [class.is-valid]="title.valid && title.touched"
+                   class="form-control"
+                   formControlName="title"
+                   id="titleInput"
+                   type="text"/>
+            <div *ngIf="title.invalid && title.touched"
+                 class="invalid-feedback text-danger">
+              <div *ngIf="title.errors?.['required']">Title is required</div>
+              <div *ngIf="title.errors?.['minlength']">Title must be at least 5 characters long</div>
+              <div *ngIf="title.errors?.['maxlength']">Title must be no longer than 100 characters</div>
+            </div>
+          </div>
+
+          <div class="pt-4">
+            <label for="categorySelect">Category:</label>
+            <div class="d-flex">
+              <select [class.is-invalid]="categoryId.invalid && categoryId.touched"
+                      [class.is-valid]="categoryId.valid && categoryId.touched"
+                      class="form-control"
+                      formControlName="categoryId"
+                      id="categorySelect"
+                      type="text">
+                <option *ngFor="let category of categories" value="{{category.id}}">{{ category.name }}</option>
+              </select>
+              <div *ngIf="categoryId.invalid && categoryId.touched && categoryId.errors?.['required']"
+                   class="invalid-feedback text-danger">Category is required
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-4">
+            <label for="contentTextarea">Content:</label>
+            <textarea [class.is-invalid]="content.invalid && content.touched"
+                      [class.is-valid]="content.valid && content.touched"
+                      class="form-control"
+                      formControlName="content"
+                      id="contentTextarea"></textarea>
+            <div *ngIf="content.invalid && content.touched && content.errors?.['required']"
+                 class="invalid-feedback text-danger">Content is required
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-end pt-4">
+            <button class="btn btn-outline-danger" data-bs-dismiss="modal" type="button">Close</button>
+            <button class="btn btn-success" data-bs-dismiss="modal" type="submit">Update Post</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,15 @@
+<div *ngIf="posts && posts.length">
+  <div class="mt-4">
+    <button (click)="invert()" class="btn btn-secondary" type="button">
+      <i *ngIf="!inverted" class="bi bi-arrow-down"></i>
+      <i *ngIf="inverted" class="bi bi-arrow-up"></i>
+    </button>
+  </div>
+  <div *ngFor="let post of posts">
+    <app-post-list-item (postDeletedEvent)="loadPosts()" [post]="post"></app-post-list-item>
+  </div>
+</div>
+
+<div *ngIf="!posts || posts.length === 0">
+  <p>No posts available</p>
+</div>
